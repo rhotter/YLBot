@@ -1,0 +1,10 @@
+.message {
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 80px;
+  height: 80px
+}
+
+.row:hover {
+  cursor: pointer;
+}

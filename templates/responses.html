@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YLBot</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="../static/alien.png"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+    @media (max-width: 500px) {
+      .largeItem {
+        display: none !important;
+      }
+      .smallItem {
+        display:inline !important;
+      }
+      .hiddenWhenSmall {
+        display: none !important;
+      }
+    }
+
+    @media (min-width: 501px) {
+      .largeItem {
+        display:inline !important;
+      }
+      .smallItem {
+        display: none !important;
+      }
+    }
+
+    .row {
+      max-height: 30px;
+    }
+
+    .clicky:hover {
+      cursor: pointer;
+    }
+
+    </style>
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header" style="text-align: center">
+        <h1><span onclick="window.location.href='/'" class="clicky">YLBot</span></h1>
+        <h5><a href="/">Send</a> &nbsp; | &nbsp; <a href="/responses" style="color: rgba(0, 0, 0, 0.71);">Responses</a></h5>
+      </div>
+      <div>
+        {% for message in responses %}
+        <div style="margin-bottom: 35px">
+          <div style="margin-top:10px; margin-bottom:10px; font-size: 14px;">
+            <strong><div style="font-size: 12px">{{message['date']}}</div></strong>
+            <div class="well well-sm" style="margin-top: 5px; margin-bottom:5px; font-size: 14px;">
+              {{message['body']}}
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <table class="table table-bordered">
+              <thead>
+                <tr class="row">
+                  <th><span class="largeItem">First name</span><span class="smallItem">First</span></th>
+                  <th><span class="largeItem">Last name</span><span class="smallItem">Last</span></th>
+                  <th class="hiddenWhenSmall"><span class="largeItem">Phone number</span></th>
+                  <th><span class="largeItem">Response</span><span class="smallItem">Response</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in message['responses'] %}
+                <tr class="row">
+                  <td>{{row['firstName']}}</td>
+                  <td>{{row['lastName']}}</td>
+                  <td class="hiddenWhenSmall">{{row['phoneNumber']}}</td>
+                  <td>{{row['reply']}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

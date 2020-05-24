@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YLBot</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="../static/alien.png"/>
+
+
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+
+    @media (max-width: 500px) {
+      .largeItem {
+        display: none !important;
+      }
+      .smallItem {
+        display:inline !important;
+      }
+    }
+
+    @media (min-width: 501px) {
+      .largeItem {
+        display:inline !important;
+      }
+      .smallItem {
+        display: none !important;
+      }
+    }
+
+    .row {
+      max-height: 30px;
+    }
+
+    .clicky:hover {
+      cursor: pointer;
+    }
+
+    </style>
+
+
+    <script>
+    function rowClicked(i) {
+      var id = "checked_" + i;
+      var checkbox = document.getElementById(id).checked;
+      console.log(checkbox)
+
+      if (checkbox==true) {
+        document.getElementById(id).checked = false;
+      } else {
+        document.getElementById(id).checked = true;
+      }
+    }
+
+    function checkAll() {
+      var checkboxes = document.getElementsByClassName("checkboxes");
+      if (document.getElementById("checked-all").checked==false) {
+        for (i=0;i<checkboxes.length;i++) {
+          document.getElementsByClassName("checkboxes")[i].checked = false;
+        }
+      } else {
+        for (i=0;i<checkboxes.length;i++) {
+          document.getElementsByClassName("checkboxes")[i].checked = true;
+        }
+      }
+    }
+
+    function filterFunction() {
+      var text = document.getElementById("searchBar").value.toUpperCase();
+      var firstNames = document.getElementsByClassName("firstName");
+      var lastNames = document.getElementsByClassName("lastName");
+      var phoneNumbers = document.getElementsByClassName("phoneNumber");
+
+      for (var i=0; i<firstNames.length;i++) {
+        var name = firstNames[i].innerHTML + ' ' + lastNames[i].innerHTML;
+        name = name.toUpperCase()
+        if (name.indexOf(text) == -1 && phoneNumbers[i].innerHTML.indexOf(text) == -1) {
+          document.getElementById([i]).style.display = 'none';
+        } else {
+          document.getElementById([i]).style.display = '';
+        }
+      }
+    }
+
+    </script>
+
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header" style="text-align: center">
+        <h1><span onclick="window.location.href='/'" class="clicky">YLBot</span></h1>
+        <h5><a href="/" style="color: rgba(0, 0, 0, 0.71);">Send</a> &nbsp; | &nbsp; <a href="/responses">Responses</a></h5>
+      </div>
+
+      <form action="/send" method="post">
+        <div style="margin-bottom:30px">
+          <div>
+            <label for="message">Message:</label>
+            <textarea name="body" class="form-control message" rows="3" id="message"></textarea>
+          </div>
+
+          <div style="margin-top: 15px">
+            <label for="imageURL">Image URL (not required):</label>
+            <input name="imageURL" class="form-control" id="imageURL"></input>
+          </div>
+
+          <div style="margin-top:15px">
+            <input class="btn btn-primary" type="submit" value="Send">
+          </div>
+
+        </div>
+
+        <div class="panel panel-default">
+          <input type="text" id="searchBar" class="form-control" placeholder="Search" oninput="filterFunction()"
+          style="border: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0; ">
+        <table class="table table-bordered" style="border-top: solid #ddd; border-top-width: 1px;">
+          <thead>
+            <tr class="row">
+              <th style="text-align:center; max-width: 50px;"><input type="checkbox" name="check-all" id="checked-all" onclick="checkAll()"></th>
+              <th><span class="largeItem">First name</span><span class="smallItem">First</span></th>
+              <th><span class="largeItem">Last name</span><span class="smallItem">Last</span></th>
+              <th><span class="largeItem">Phone number</span><span class="smallItem">Phone #</span></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for i in range(values|length) %}
+            <tr class="row" id="{{i}}">
+              <td align="center">
+                  <input type="checkbox" class="checkboxes" name="checked" id="checked_{{i}}" value="{{values[i][0]}}###{{values[i][1]}}###{{values[i][2]}}">
+              </td>
+              <td onclick="rowClicked({{i}})" class="firstName">{{values[i][0]}}</td>
+              <td onclick="rowClicked({{i}})" class="lastName">{{values[i][1]}}</td>
+              <td onclick="rowClicked({{i}})" class="phoneNumber">{{values[i][2]}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      </form>
+      <br><br>
+    </div>
+  </body>
+</html>
